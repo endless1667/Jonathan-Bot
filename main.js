@@ -24,9 +24,16 @@ client.on('message_create', message => {
 client.on('message_create', message => {
     if(message.body === 'oi') {
         message.reply('Ola, voce esta conectado ao bot de Endlesss!');
-        message.reply('bao');
+        message.reply('sou um projeto pessoal de bot do endless para whatsapp');
         message.react<('👋');
         message.reply('me chamo jonathan');
+    }
+}
+) 
+client.on('message_create', message => {
+    if(message.body === 'tchau') {
+        message.reply('Tchau, ate mais!');
+        message.react<('👋');
     }
 }
 )
