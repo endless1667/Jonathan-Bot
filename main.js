@@ -1,12 +1,31 @@
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const client = new Client({
-    puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    }
+    authStrategy: new LocalAuth({ 
+    clientId: "client-one" })  // Salva a sessao para nao precisar escanear o QR code toda vez que iniciar o bot
 });
 
+const client2 = new Client({
+    authStrategy: new LocalAuth({
+    clientId: "client-two" }) //pode criar varios clientes com IDs diferentes
+});
+
+const client3 = new Client({
+    authStrategy: new LocalAuth({
+    clientId: "client-three" }) //pode criar varios clientes com IDs diferentes
+});
+
+
+client.on('remote_session_saved', () => {
+    // Do Stuff...
+});
+client2.on('remote_session_saved', () => {
+    // Do Stuff...
+});
+client3.on('remote_session_saved', () => {
+    // Do Stuff...
+});
 
 client.on('ready', () => {
     console.log('Client is ready!');
@@ -20,6 +39,20 @@ client.on('qr', qr => {
 client.on('message_create', message => {
 	console.log(message.body);
 });
+
+
+// client initialization...
+
+
+client.on('message', async (msg) => {
+    const chat = await msg.getChat();
+    let user = await msg.getContact();
+    await chat.sendMessage(`Hello @${user.id.user}`, {
+        mentions: [user]
+    });
+});
+
+
 
 client.on('message_create', message => {
     if(message.body === 'oi') {
